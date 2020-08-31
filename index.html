@@ -2,13 +2,25 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">     <!-- Meta per responsive -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>     <!-- jQuery -->
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://momentjs.com/downloads/moment.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
         <link rel="stylesheet" href="css/style.css">
-	    <!-- Aggiungere Handlebars (prima di link css) -->
         <title>ajax-ex-calendar</title>
     </head>
     <body>
+        <div class="container">
+            <button id="prev"><<</button>
+            <h1 class="month" data-this-date="2018-01-01"></h1>
+            <button id="next">>></button>
+
+            <ul class="month-list"></ul>
+        </div>
+
+        <script id="entry-template" type="text/x-handlebars-template">
+           <li data-complete-date="{{completeDate}}">{{day}} {{month}}</li>
+        </script>
 
         <script src="js/script.js" charset="utf-8"></script>
     </body>

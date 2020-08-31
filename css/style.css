@@ -10,4 +10,16 @@
     clear: both;
 }
 
-/* Aggiungere container */
+.container {
+    width: 40%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+button, h1 {
+    display: inline-block;
+}
+
+li.red {
+    color:red;
+}
