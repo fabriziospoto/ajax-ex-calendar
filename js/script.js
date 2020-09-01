@@ -14,16 +14,27 @@
 
 $( document ).ready(function() {
     //Creo oggetto moment con data 2018-01-01
-    var corrente = moment('2018-01-01');
+    //var corrente = moment('2018-01-01');
+    var corrente = moment($('h1.month').attr('data-this-date'));
     //Funzione giorno mese
     giorni(corrente);
     //Funzione festività
     festivita(corrente);
 
+    $('button#next').click(function(){
+        next(corrente);
+    })
+    ;
+    $('button#prev').click(function(){
+        prev(corrente);
+    });
+
 });
 
 //********FUNZIONI
 function giorni(data) {
+    $('ul.month-list').empty();
+
     // Riporto mese e anno di 'coorente' in h1
     var month = data.format('MMMM');
     var year = data.format('YYYY');
@@ -40,7 +51,7 @@ function giorni(data) {
         var context = {
             day: addZero(i),
             month: data.format('MMMM'),
-            completeDate: year + ' ' + data.format('MM') + addZero(i)
+            completeDate: year + '-' + data.format('MM') + '-' + addZero(i)
         };
         var html = template(context);
         //Riporto giorni in ul li
@@ -51,23 +62,29 @@ function giorni(data) {
 function festivita(data) {
     $.ajax(
         {
-            url: 'https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0',
+            url: 'https://flynn.boolean.careers/exercises/api/holidays',
             method: 'GET',
             data: {
-                year: data.format(),
+                year: data.year(),
                 month: data.month()
             },
-            success: function(data){
-                var y = data.response;
-                console.log(y);
-                console.log(data);
-                for (var i = 0; i < y.length; i++) {
-                    var z = y[i];
+            success: function(risposta){
+                //var y = risposta.response;
+                // console.log(y);
+                // console.log(risposta);
+                for (var i = 0; i < risposta.response.length; i++) {
+                    var lista = $('li[data-complete-date="' + risposta.response[i].date + '"]');
+                    //console.log(risposta.response);
+
+                    //var z = y[i];
+                    //console.log(z);
                     // var vacanza = risposta.response;
-                    var lista = $('li[data-complete-date="' + z.date + '"]');
+
+
                     //$('li[data-complete-date="' + vacanza.date + '"]');
-                    lista.append('-' + z.name);
+                    lista.append('-' + risposta.response[i].name);
                     lista.addClass('red');
+
                 }
             },
             error: function() {
@@ -81,7 +98,25 @@ function addZero(n) {
     if (n < 10) {
         return '0' + n;
     }
-
     return n;
+}
 
+function next(data) {
+    if(data.month()==11) {
+        alert('Non puoi proseguire')
+    } else {
+        data.add(1, 'months');
+        giorni(data);
+        festivita(data);
+    }
+}
+
+function prev(data) {
+    if(data.month()==0) {
+        alert('Non puoi proseguire')
+    } else {
+        data.subtract(1, 'months');
+        giorni(data);
+        festivita(data);
+    }
 }
